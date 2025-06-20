@@ -1,0 +1,35 @@
+/* Custom Keyframes for Animations */
+@keyframes pulse-subtle {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+@keyframes bounce-custom {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-5px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(-2px);
+  }
+}
+
+/* Animation Classes */
+.pulseSubtle {
+  animation: pulse-subtle 1.5s infinite ease-in-out;
+}
+
+.bounceCustom {
+  animation: bounce-custom 2s infinite ease-in-out;
+}

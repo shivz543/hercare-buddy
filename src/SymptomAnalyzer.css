@@ -1,0 +1,393 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;600;700;800&display=swap');
+
+/* Define your custom color variables */
+:root {
+  --hercare-primary: #FF6B6B; /* Soft Coral */
+  --hercare-secondary: #A2D5C6; /* Muted Sage Green */
+  --hercare-light-bg: #FDFDFD;
+  --hercare-dark-bg: #1A202C; /* Deep, soft dark blue/gray */
+  --hercare-light-text: #333333;
+  --hercare-dark-text: #E2E8F0;
+  --hercare-light-secondary-text: #555555;
+  --hercare-dark-secondary-text: #A0AEC0;
+  --hercare-card-light: #FFFFFF;
+  --hercare-card-dark: #2C3E50; /* Slightly lighter dark background for dark mode cards */
+  --hercare-hover-light: #FFF5F5;
+  --hercare-hover-dark: #37475A;
+  --hercare-orange-warning: #fb923c; /* Tailwind's orange-400 */
+  --hercare-rose-dark: #e11d48; /* Tailwind's rose-700 */
+}
+
+/* Global Font Application (can also go in src/global.css/index.css) */
+body {
+  font-family: 'Inter', sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+}
+
+
+/* Base Container for SymptomAnalyzer */
+.symptom-analyzer-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--hercare-dark-bg);
+  overflow: hidden; /* To contain background elements */
+}
+
+/* Background Doodles - NOW USING CSS GRADIENTS */
+.symptom-analyzer-background-doodles {
+  position: absolute;
+  inset: 0; /* top:0; right:0; bottom:0; left:0; */
+  z-index: 0;
+  /* Use a very subtle dark color for the lines, with low opacity */
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 2px, transparent 2px, transparent 4px),
+    repeating-linear-gradient(-45deg, rgba(255,255,255,0.02) 2px, transparent 2px, transparent 4px);
+  background-size: 16px 16px; /* Adjust size for density of pattern (smaller values make it denser) */
+}
+
+/* Main Content Card */
+.symptom-analyzer-card {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 960px; /* max-w-4xl */
+  background-color: rgba(44, 62, 80, 0.9); /* hercare-card-dark with opacity */
+  backdrop-filter: blur(10px); /* backdrop-blur-lg */
+  border-radius: 24px; /* rounded-3xl */
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 10px 10px -5px rgba(0, 0, 0, 0.2); /* shadow-2xl */
+  border: 1px solid var(--hercare-dark-bg); /* border-gray-700 */
+  padding: 32px; /* p-8 */
+  transition: all 0.3s ease-in-out;
+}
+.symptom-analyzer-card:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 15px 15px -8px rgba(0, 0, 0, 0.25); /* shadow-3xl equivalent */
+}
+@media (min-width: 768px) { /* md:p-12 */
+  .symptom-analyzer-card {
+    padding: 48px;
+  }
+}
+
+/* Header (H1) */
+.symptom-analyzer-header {
+  font-family: 'Poppins', sans-serif;
+  font-size: 48px; /* text-5xl */
+  font-weight: 800; /* font-extrabold */
+  color: var(--hercare-primary);
+  margin-bottom: 40px; /* mb-10 */
+  letter-spacing: -0.025em; /* tracking-tight */
+  text-align: center;
+}
+.symptom-analyzer-header span { /* Emoji */
+  display: inline-block;
+  margin-right: 16px; /* mr-4 */
+  font-size: 64px; /* text-6xl */
+}
+
+/* Intro Paragraph */
+.symptom-analyzer-intro {
+  color: var(--hercare-dark-secondary-text);
+  font-size: 18px; /* text-lg */
+  text-align: center;
+  margin-bottom: 40px; /* mb-10 */
+  max-width: 640px; /* max-w-2xl */
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 500; /* font-medium */
+}
+
+/* Symptom List Container */
+.symptom-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px; /* space-y-6 */
+}
+@media (min-width: 768px) { /* md:space-y-8 */
+  .symptom-list-container {
+    gap: 32px;
+  }
+}
+
+/* Individual Symptom Card */
+.symptom-card {
+  background-color: rgba(26, 32, 44, 0.7); /* hercare-dark-bg with opacity */
+  padding: 20px; /* p-5 */
+  border-radius: 12px; /* rounded-xl */
+  border: 1px solid #374151; /* border-gray-700 */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+  display: flex;
+  flex-direction: column; /* flex-col */
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease-in-out;
+}
+.symptom-card:hover {
+  background-color: var(--hercare-hover-dark);
+  transform: translateY(-4px); /* hover:-translate-y-1 */
+}
+@media (min-width: 768px) { /* md:flex-row */
+  .symptom-card {
+    flex-direction: row;
+  }
+}
+
+/* Symptom Name and Emoji */
+.symptom-name {
+  font-size: 24px; /* text-2xl */
+  font-weight: 600; /* font-semibold */
+  color: var(--hercare-dark-text);
+  margin-bottom: 16px; /* mb-4 */
+  display: flex;
+  align-items: center;
+  width: 100%; /* w-full */
+}
+.symptom-name span { /* Emoji */
+  margin-right: 12px; /* mr-3 */
+  font-size: 32px; /* text-3xl */
+}
+@media (min-width: 768px) { /* md:mb-0 md:w-1/3 */
+  .symptom-name {
+    margin-bottom: 0;
+    width: 33.333333%;
+  }
+}
+
+/* Severity Buttons Container */
+.severity-buttons-container {
+  display: flex;
+  flex-wrap: wrap; /* flex-wrap */
+  gap: 12px; /* gap-3 */
+  justify-content: center; /* justify-center */
+  width: 100%; /* w-full */
+}
+@media (min-width: 768px) { /* md:gap-4 md:justify-end md:w-2/3 */
+  .severity-buttons-container {
+    gap: 16px;
+    justify-content: flex-end;
+    width: 66.666667%;
+  }
+}
+
+/* Severity Button Base Styles */
+.severity-button {
+  padding: 8px 20px; /* px-5 py-2 */
+  font-size: 16px; /* text-base */
+  border-radius: 9999px; /* rounded-full */
+  border: 2px solid;
+  font-weight: 500; /* font-medium */
+  text-transform: capitalize;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+  transition: all 0.2s ease-in-out;
+  transform-origin: center;
+  outline: none; /* focus:outline-none */
+}
+.severity-button:hover {
+  transform: scale(1.05); /* hover:scale-105 */
+}
+.severity-button:focus {
+  box-shadow: 0 0 0 4px rgba(var(--hercare-primary-rgb), 0.7); /* focus:ring-4 with custom color */
+  box-shadow: 0 0 0 4px var(--hercare-primary); /* Simple ring */
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.7), 0 0 0 8px rgba(255, 107, 107, 0.3); /* focus:ring-4 focus:ring-opacity-70 */
+}
+
+
+/* Severity Button Inactive State */
+.severity-button-inactive {
+  background-color: var(--hercare-dark-bg);
+  color: var(--hercare-dark-secondary-text);
+  border-color: #4b5563; /* border-gray-600 */
+}
+.severity-button-inactive:hover {
+  background-color: var(--hercare-card-dark); /* hover:bg-hercare-card-dark */
+  color: var(--hercare-dark-text); /* hover:text-hercare-dark-text */
+}
+
+/* Severity Button Active States (use these classes with JS for conditional styling) */
+.severity-button-mild-active {
+  background-color: var(--hercare-secondary);
+  color: var(--hercare-dark-bg);
+  border-color: var(--hercare-secondary);
+  box-shadow: 0 0 0 2px rgba(162, 213, 198, 0.7), 0 0 0 4px var(--hercare-card-dark); /* ring-2 ring-offset-2 ring-offset-hercare-card-dark */
+}
+.severity-button-mild-active:hover {
+  background-color: rgba(162, 213, 198, 0.8);
+}
+
+.severity-button-moderate-active {
+  background-color: var(--hercare-orange-warning);
+  color: var(--hercare-dark-bg);
+  border-color: var(--hercare-orange-warning);
+  box-shadow: 0 0 0 2px rgba(251, 146, 60, 0.7), 0 0 0 4px var(--hercare-card-dark);
+}
+.severity-button-moderate-active:hover {
+  background-color: rgba(251, 146, 60, 0.9);
+}
+
+.severity-button-severe-active {
+  background-color: var(--hercare-primary);
+  color: #fff;
+  border-color: var(--hercare-primary);
+  box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.7), 0 0 0 4px var(--hercare-card-dark);
+}
+.severity-button-severe-active:hover {
+  background-color: var(--hercare-rose-dark); /* hover:bg-rose-600 equivalent */
+}
+
+
+/* Analyze Button */
+.analyze-button {
+  margin-top: 48px; /* mt-12 */
+  width: 100%;
+  background-color: var(--hercare-primary);
+  color: #fff; /* text-white */
+  font-size: 20px; /* text-xl */
+  font-weight: 700; /* font-bold */
+  padding: 16px 24px; /* px-6 py-4 */
+  border-radius: 12px; /* rounded-xl */
+  transition: all 0.2s ease-in-out;
+  transform-origin: center;
+  outline: none; /* focus:outline-none */
+  display: flex; /* flex */
+  align-items: center; /* items-center */
+  justify-content: center; /* justify-center */
+  border: none;
+}
+.analyze-button:hover {
+  background-color: var(--hercare-rose-dark); /* hover:bg-rose-600 */
+  transform: translateY(-4px); /* hover:-translate-y-1 */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* hover:shadow-lg */
+}
+.analyze-button:focus {
+  box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.7), 0 0 0 8px rgba(255, 107, 107, 0.3); /* focus:ring-4 focus:ring-hercare-primary focus:ring-opacity-70 */
+}
+.analyze-button:active {
+  transform: scale(0.98); /* active:scale-98 */
+}
+.analyze-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Spinner for Analyze Button */
+.analyze-button-spinner {
+  animation: spin 1s linear infinite; /* animate-spin */
+  margin-left: -4px; /* -ml-1 */
+  margin-right: 12px; /* mr-3 */
+  height: 20px; /* h-5 */
+  width: 20px; /* w-5 */
+  color: #fff; /* text-white */
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
+/* Result Box */
+.result-box {
+  margin-top: 32px; /* mt-8 */
+  background-color: var(--hercare-card-dark);
+  border: 1px solid var(--hercare-dark-bg); /* border-gray-700 */
+  padding: 24px; /* p-6 */
+  border-radius: 12px; /* rounded-xl */
+  color: var(--hercare-primary);
+  text-align: center;
+  font-weight: 600; /* font-semibold */
+  font-size: 20px; /* text-xl */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+}
+
+/* CTA Section */
+.doctor-cta-section {
+  position: relative;
+  z-index: 20;
+  margin-top: 40px; /* mt-10 */
+  padding: 20px; /* p-5 */
+  background: linear-gradient(to right, var(--hercare-primary), var(--hercare-rose-dark)); /* bg-gradient-to-r from-hercare-primary to-rose-700 */
+  color: #fff; /* text-white */
+  border-radius: 12px; /* rounded-xl */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
+  display: flex;
+  flex-direction: column; /* flex-col */
+  align-items: center;
+  justify-content: center;
+  gap: 16px; /* space-y-4 */
+  border: 1px solid rgba(255, 107, 107, 0.5); /* border-hercare-primary/50 */
+}
+@media (min-width: 640px) { /* sm:flex-row sm:space-y-0 sm:space-x-6 */
+  .doctor-cta-section {
+    flex-direction: row;
+    gap: 0;
+  }
+  .doctor-cta-section > *:first-child {
+    margin-right: 24px; /* sm:space-x-6 */
+  }
+}
+
+.doctor-cta-text {
+  font-size: 24px; /* text-2xl */
+  font-weight: 700; /* font-bold */
+  letter-spacing: 0.025em; /* tracking-wide */
+}
+
+.doctor-cta-button {
+  background-color: #fff; /* bg-white */
+  color: var(--hercare-primary); /* text-purple-800 adjusted to primary */
+  padding: 12px 32px; /* px-8 py-3 */
+  border-radius: 9999px; /* rounded-full */
+  font-weight: 700; /* font-bold */
+  font-size: 18px; /* text-lg */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-lg */
+  transition: all 0.2s ease-in-out;
+  transform-origin: center;
+  text-decoration: none; /* for anchor tag */
+}
+.doctor-cta-button:hover {
+  background-color: #e5e7eb; /* hover:bg-gray-200 */
+  transform: scale(1.05); /* hover:scale-105 */
+}
+
+/* Framer Motion equivalent animations (if you want to keep them as pure CSS) */
+/* If you are already using Framer Motion, these CSS keyframes are for reference
+   or if you want to apply them to non-Framer Motion elements. */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* The 'blob' animation is complex and might be better handled by JS or a more advanced CSS library if not Framer Motion.
+   Keeping it here for completeness if you decide to use it as pure CSS. */
+@keyframes blob {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+@keyframes pulseFadeIn { /* For CTA */
+  0% { opacity: 0; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.02); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Custom utility classes if you want to keep some named animations */
+.animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+.animate-fade-in-down { animation: fadeInDown 0.8s ease-out forwards; }
+.animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+.animate-blob { animation: blob 7s infinite cubic-bezier(0.68, -0.55, 0.27, 1.55); }
+.animation-delay-2000 { animation-delay: 2s; }
+.animation-delay-4000 { animation-delay: 4s; }
+.animate-pulse-fade-in { animation: pulseFadeIn 1s ease-out forwards; }

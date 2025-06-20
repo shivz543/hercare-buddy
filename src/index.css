@@ -1,0 +1,72 @@
+/* src/index.css (or src/global.css) */
+
+/* Import Google Fonts (if not already in public/index.html) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;600;700;800&display=swap');
+
+/* Default (Light) Theme Variables */
+:root { /* These are the default values when no .dark-mode class is applied */
+  --color-primary: #FF6B6B; /* Soft Coral */
+  --color-secondary: #A2D5C6; /* Muted Sage Green */
+
+  --color-bg: #FDFDFD; /* Very light cream background for the entire page */
+  --color-text: #333333; /* Dark charcoal for primary text */
+  --color-secondary-text: #555555; /* Slightly lighter gray for secondary text */
+  --color-card-bg: #FFFFFF; /* White for cards */
+  --color-card-border: #E2E8F0; /* Light gray border */
+  --color-hover-bg: #FFF5F5; /* Very light pink hover for cards/buttons */
+  --color-shadow: rgba(0, 0, 0, 0.08); /* Lighter shadows */
+  --color-focus-ring-offset: var(--color-card-bg);
+
+  --color-orange-warning: #fb923c; /* Orange for moderate severity */
+  --color-rose-dark: #e11d48; /* Darker rose for hover/CTA gradients */
+
+  --doodle-line-color: rgba(0,0,0,0.02); /* Very faint black for light background doodle */
+}
+
+/* Dark Theme Overrides */
+.dark-mode { /* This class will be applied to the <html> element */
+  --color-bg: #1A202C;
+  --color-text: #E2E8F0;
+  --color-secondary-text: #A0AEC0;
+  --color-card-bg: #2C3E50;
+  --color-card-border: #374151;
+  --color-hover-bg: #37475A;
+  --color-shadow: rgba(0, 0, 0, 0.4);
+  --color-focus-ring-offset: var(--color-card-bg);
+
+  --doodle-line-color: rgba(255,255,255,0.02); /* Very faint white for dark background doodle */
+}
+
+/* Global Font Application */
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  color: var(--color-text); /* Apply global text color */
+  background-color: var(--color-bg); /* Apply global background color */
+  transition: background-color 0.3s ease-in-out; /* Smooth transition for background */
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Global Background Doodle for the entire app */
+html, body, #root { /* Ensure these take full height/width */
+  height: 100%;
+  width: 100%;
+}
+
+.app-background-doodles {
+  background-image:
+    repeating-linear-gradient(45deg, var(--doodle-line-color) 2px, transparent 2px, transparent 4px),
+    repeating-linear-gradient(-45deg, var(--doodle-line-color) 2px, transparent 2px, transparent 4px);
+  background-size: 16px 16px; /* Adjust size for density */
+  /* background-color is already applied to body */
+}
+
+/* Optional: General styles for text color for non-specific elements that don't pick up via direct component styling */
+.text-color-primary { color: var(--color-text); }
+.text-color-secondary { color: var(--color-secondary-text); }
+
+/* Remove any duplicate keyframes or animation classes if you also have them in public/animations.css */
+/* If public/animations.css only has unique, very specific, non-themable animations, that's fine. */
+/* Otherwise, consolidate all keyframes here. */

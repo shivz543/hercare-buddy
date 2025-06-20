@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion"; // Still using Framer Motion for more complex animations
+
+// Import the new CSS file
+import './SymptomAnalyzer.css'; // Make sure the path is correct relative to SymptomAnalyzer.jsx
 
 const symptomsList = [
-  { name: "Cramps", emoji: "🤕" },
-  { name: "Heavy Bleeding", emoji: "🩸" },
-  { name: "Mood Swings", emoji: "😠" },
-  { name: "Bloating", emoji: "😣" },
-  { name: "Breast Tenderness", emoji: "🫃" },
-  { name: "Acne", emoji: "😞" },
+  { name: "Cramps", emoji: "💥" },
+  { name: "Heavy Bleeding", emoji: "💧" },
+  { name: "Mood Swings", emoji: "🎭" },
+  { name: "Bloating", emoji: "🎈" },
+  { name: "Breast Tenderness", emoji: "🍈" },
+  { name: "Acne", emoji: "🌋" },
   { name: "Nausea", emoji: "🤢" },
-  { name: "Back Pain", emoji: "💢" },
-  { name: "Fatigue", emoji: "🥱" },
-  { name: "Headache", emoji: "🤯" },
+  { name: "Back Pain", emoji: "🦴" },
+  { name: "Fatigue", emoji: "💤" },
+  { name: "Headache", emoji: "🤕" },
+  { name: "Insomnia", emoji: "😴" },
+  { name: "Irregular Cycle", emoji: "⏰" },
 ];
 
 const severityScore = {
@@ -19,16 +25,14 @@ const severityScore = {
   severe: 3,
 };
 
-const severityColors = {
-  mild: "bg-green-200 text-green-800 border-green-400",
-  moderate: "bg-yellow-200 text-yellow-800 border-yellow-400",
-  severe: "bg-red-200 text-red-800 border-red-400",
-};
+// No longer need severityColors object here as styling is in CSS classes
+// const severityColors = { ... };
 
 function SymptomAnalyzer() {
   const [symptoms, setSymptoms] = useState({});
   const [result, setResult] = useState("");
   const [showDoctorCTA, setShowDoctorCTA] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const handleChange = (symptom, level) => {
     setSymptoms((prev) => ({
@@ -38,99 +42,174 @@ function SymptomAnalyzer() {
   };
 
   const analyze = () => {
-    const levels = Object.values(symptoms);
+    setIsAnalyzing(true); // Start loading animation
 
-    if (levels.length === 0) {
-      setResult("📝 Please select severity for at least one symptom.");
-      setShowDoctorCTA(false);
-      return;
-    }
+    setTimeout(() => { // Simulate an API call or processing delay
+      const levels = Object.values(symptoms);
 
-    const score = levels.reduce((total, level) => total + severityScore[level], 0);
+      if (levels.length === 0) {
+        setResult("📝 Please select severity for at least one symptom.");
+        setShowDoctorCTA(false);
+        setIsAnalyzing(false);
+        return;
+      }
 
-    if (score >= 7) {
-      setResult("❗ Based on your input, we recommend consulting a doctor.");
-      setShowDoctorCTA(true);
-    } else if (score >= 4) {
-      setResult("⚠️ Keep track of your symptoms. Take rest and hydrate.");
-      setShowDoctorCTA(false);
-    } else {
-      setResult("✅ You're experiencing mild symptoms. Take care 💖");
-      setShowDoctorCTA(false);
-    }
+      const score = levels.reduce((total, level) => total + severityScore[level], 0);
+
+      let newResult = "";
+      let newShowDoctorCTA = false;
+
+      if (score >= 9) {
+        newResult = "❗ Based on your input, we strongly recommend consulting a doctor immediately.";
+        newShowDoctorCTA = true;
+      } else if (score >= 6) {
+        newResult = "⚠️ Your symptoms indicate a moderate concern. Consider tracking closely or consulting a professional if they persist.";
+        newShowDoctorCTA = true;
+      } else {
+        newResult = "✅ You're experiencing mild symptoms. Focus on self-care, rest, and hydration.💖";
+        newShowDoctorCTA = false;
+      }
+
+      setResult(newResult);
+      setShowDoctorCTA(newShowDoctorCTA);
+      setIsAnalyzing(false);
+    }, 800); // Small delay for animation
+  };
+
+  // Framer Motion variants remain the same as they are JS objects
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 },
+  };
+
+  const resultVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.3, ease: "easeIn" } }
+  };
+
+  const ctaVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: "easeOut", delay: 0.2 } },
+    exit: { opacity: 0, scale: 0.8, transition: { duration: 0.3, ease: "easeIn" } }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-rose-100 via-pink-100 to-rose-200 p-6 flex flex-col items-center relative">
-        {/* Floating Emoji Background */}
-<div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-  {[...Array(15)].map((_, i) => (
-    <span
-      key={i}
-      className={`absolute text-3xl opacity-20 animate-float`}
-      style={{
-        top: `${Math.random() * 100}%`,
-        left: `${Math.random() * 100}%`,
-        animationDuration: `${5 + Math.random() * 5}s`,
-      }}
-    >
-      {["💗", "🌼", "💕", "🌸", "💫"][i % 5]}
-    </span>
-  ))}
-</div>
-      <h1 className="text-4xl font-extrabold text-rose-700 mb-8 tracking-wider animate-fade-in">🩺 Symptom Analyzer</h1>
+    <div className="symptom-analyzer-container">
+      {/* Background Doodles */}
+      <div className="symptom-analyzer-background-doodles"></div>
 
-      <div className="bg-white p-6 rounded-2xl shadow-xl max-w-3xl w-full space-y-6">
-        {symptomsList.map((symptom, i) => (
-          <div key={i} className="pb-2 border-b">
-            <p className="text-lg font-semibold text-gray-800 mb-3">
-              {symptom.emoji} {symptom.name}
-            </p>
-            <div className="flex gap-4">
-              {["mild", "moderate", "severe"].map((level) => (
-                <button
-                  key={level}
-                  onClick={() => handleChange(symptom.name, level)}
-                  className={`px-4 py-1 text-sm rounded-full border font-medium capitalize shadow-sm transition-all duration-150
-                    ${
-                      symptoms[symptom.name] === level
-                        ? severityColors[level]
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                    }`}
-                >
-                  {level}
-                </button>
-              ))}
-            </div>
-          </div>
-        ))}
+      {/* Main Content Card */}
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="symptom-analyzer-card"
+      >
+        <h1 className="symptom-analyzer-header">
+          <span className="symptom-analyzer-header-emoji">💖</span>Symptom Sentinel
+        </h1>
+        <p className="symptom-analyzer-intro">
+          Select the severity of your current symptoms to get personalized insights and recommendations.
+        </p>
+
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="symptom-list-container"
+        >
+          {symptomsList.map((symptom, i) => (
+            <motion.div
+              key={i}
+              variants={itemVariants}
+              className="symptom-card"
+            >
+              <p className="symptom-name">
+                <span className="symptom-emoji">{symptom.emoji}</span> {symptom.name}
+              </p>
+              <div className="severity-buttons-container">
+                {["mild", "moderate", "severe"].map((level) => (
+                  <button
+                    key={level}
+                    onClick={() => handleChange(symptom.name, level)}
+                    className={`
+                      severity-button
+                      ${symptoms[symptom.name] === level
+                          ? `severity-button-${level}-active`
+                          : "severity-button-inactive"
+                      }`}
+                  >
+                    {level}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
 
         <button
           onClick={analyze}
-          className="mt-6 w-full bg-rose-500 text-white text-lg font-semibold px-4 py-3 rounded-xl hover:bg-rose-600 transition transform hover:scale-[1.01]"
+          disabled={isAnalyzing}
+          className="analyze-button"
         >
-          💡 Analyze Symptoms
+          {isAnalyzing ? (
+            <svg className="analyze-button-spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          ) : (
+            <>🔮 Analyze Symptoms</>
+          )}
         </button>
 
-        {result && (
-          <div className="mt-6 bg-rose-100 border border-rose-300 p-4 rounded-lg text-rose-800 text-center font-medium text-lg shadow-sm animate-fade-in">
-            {result}
-          </div>
-        )}
-      </div>
+        <AnimatePresence>
+          {result && (
+            <motion.div
+              key="result-box"
+              variants={resultVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="result-box"
+            >
+              {result}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
 
       {/* Floating CTA */}
-      {showDoctorCTA && (
-        <div className="fixed bottom-5 right-5 bg-white border-l-4 border-rose-500 shadow-xl p-4 rounded-xl flex items-center space-x-4 animate-bounce transition">
-          <span className="text-rose-600 text-lg font-bold">👩‍⚕️ Need help?</span>
-          <a
-            href="/consultation"
-            className="bg-rose-500 text-white px-4 py-2 rounded-md font-semibold hover:bg-rose-600"
+      <AnimatePresence>
+        {showDoctorCTA && (
+          <motion.div
+            key="cta-box"
+            variants={ctaVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="doctor-cta-section animate-pulse-fade-in"
           >
-            Consult Doctor
-          </a>
-        </div>
-      )}
+            <span className="doctor-cta-text">👩‍⚕️ Need expert advice?</span>
+            <a
+              href="/consultation"
+              className="doctor-cta-button"
+            >
+              Connect with a Doctor
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
