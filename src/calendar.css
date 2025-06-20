@@ -1,0 +1,7 @@
+.react-calendar__tile--active {
+  background: #f43f5e !important;
+  color: white;
+}
+.bg-red-200 { background-color: #fecaca !important; }
+.bg-green-200 { background-color: #bbf7d0 !important; }
+.bg-rose-300 { background-color: #fda4af !important; }
