@@ -3,6 +3,9 @@ import SplashScreen from "./SplashScreen";
 import HomePage from "./HomePage"; 
 import PeriodTracker from "./PeriodTracker";
 import SymptomAnalyzer from "./SymptomAnalyzer";
+import ForumPage from './ForumPage';
+import AITherapistDoctorPage from "./components/AITherapistDoctorPage";
+
 
 function App() {
   return (
@@ -12,6 +15,8 @@ function App() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/tracker" element={<PeriodTracker />} />
         <Route path="/analyzer" element={<SymptomAnalyzer />} />
+        <Route path="/forum" element={<ForumPage />} />
+        <Route path="/doctor-support" element={<AITherapistDoctorPage />} />
       </Routes>
     </Router>
   );

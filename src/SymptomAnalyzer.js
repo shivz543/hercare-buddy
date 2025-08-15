@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion"; // Still using Framer Motion for more complex animations
+import { motion, AnimatePresence } from "framer-motion";
 
 // Import the new CSS file
 import './SymptomAnalyzer.css'; // Make sure the path is correct relative to SymptomAnalyzer.jsx

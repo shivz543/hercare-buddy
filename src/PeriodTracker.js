@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Calendar from "react-calendar";
-import 'react-calendar/dist/Calendar.css';
-import './calendar.css'; // Optional: for custom styling
+import "react-calendar/dist/Calendar.css";
+import "./PeriodTracker.css";
 
 function PeriodTracker() {
   const [startDate, setStartDate] = useState(new Date());
@@ -10,7 +10,7 @@ function PeriodTracker() {
   const [fertileRange, setFertileRange] = useState([]);
 
   useEffect(() => {
-    if (startDate) {
+    if (startDate && cycleLength > 0) {
       const next = new Date(startDate);
       next.setDate(next.getDate() + cycleLength);
       setNextPeriodDate(next);
@@ -29,64 +29,105 @@ function PeriodTracker() {
       ) {
         range.push(new Date(d));
       }
-
       setFertileRange(range);
+    } else {
+      setNextPeriodDate(null);
+      setFertileRange([]);
     }
   }, [startDate, cycleLength]);
 
+  // Helper function to compare dates (year, month, day)
+  const isSameDate = (d1, d2) =>
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate();
+
+  // Calendar tile class assignment
   const tileClassName = ({ date }) => {
-    const isSameDate = (d1, d2) =>
-      d1.getFullYear() === d2.getFullYear() &&
-      d1.getMonth() === d2.getMonth() &&
-      d1.getDate() === d2.getDate();
-
-    if (isSameDate(date, new Date(startDate))) return "bg-red-200";
-    if (nextPeriodDate && isSameDate(date, new Date(nextPeriodDate))) return "bg-rose-300";
-    if (fertileRange.some((d) => isSameDate(d, date))) return "bg-green-200";
-
+    if (isSameDate(date, new Date(startDate))) return "period-start";
+    if (nextPeriodDate && isSameDate(date, new Date(nextPeriodDate)))
+      return "next-period";
+    if (fertileRange.some((d) => isSameDate(d, date))) return "fertile-window";
     return null;
   };
 
   return (
-    <div className="min-h-screen bg-pink-50 p-6 flex flex-col items-center">
-      <h1 className="text-3xl font-bold text-rose-600 mb-6">🩸 Period Tracker</h1>
+    <div className="tracker-container">
+      <h1 className="tracker-header">🩸 Period Tracker</h1>
 
-      <div className="bg-white p-6 rounded-xl shadow-md max-w-md w-full mb-6">
-        <label className="block mb-4">
+      <div className="input-card">
+        <label className="input-label">
           📆 Last Period Start Date:
           <input
             type="date"
             value={startDate.toISOString().split("T")[0]}
             onChange={(e) => setStartDate(new Date(e.target.value))}
-            className="w-full mt-2 p-2 border rounded"
+            className="input-field"
           />
         </label>
 
-        <label className="block mb-4">
+        <label className="input-label">
           🔁 Cycle Length (days):
           <input
             type="number"
+            min={10}
             value={cycleLength}
-            onChange={(e) => setCycleLength(Number(e.target.value))}
-            className="w-full mt-2 p-2 border rounded"
+            onChange={(e) => {
+              const val = Number(e.target.value);
+              setCycleLength(val > 0 ? val : 10);
+            }}
+            className="input-field"
           />
         </label>
+
+        {(cycleLength < 21 || cycleLength > 45) && (
+          <div
+            style={{ color: "#e11d48", fontWeight: 500, marginTop: "0.5rem" }}
+          >
+            Note: Cycles outside 21–45 days are less common but not abnormal—especially for PCOS/PCOD or teens. For irregularities, consult your healthcare provider.
+          </div>
+        )}
       </div>
 
-      <Calendar
-        value={startDate}
-        tileClassName={tileClassName}
-        className="rounded-xl shadow-md"
-      />
+      <div className="calendar-wrapper">
+        <Calendar
+          value={startDate}
+          tileClassName={tileClassName}
+          className="styled-calendar"
+        />
+      </div>
 
-      <div className="mt-4 text-sm text-gray-600 text-center">
-        🔴 Red = Period Start <br />
-        🌸 Pink = Next Period <br />
-        💚 Green = Fertile Window
+      <div
+        className="dates-info"
+        style={{ textAlign: "center", margin: "1.5rem 0", fontWeight: 600 }}
+      >
+        <p>
+          🔜 <b>Next Period:</b>{" "}
+          {nextPeriodDate ? nextPeriodDate.toLocaleDateString() : "N/A"}
+        </p>
+        <p>
+          🌱 <b>Fertile Window:</b>{" "}
+          {fertileRange.length > 0
+            ? `${fertileRange[0].toLocaleDateString()} to ${fertileRange[
+                fertileRange.length - 1
+              ].toLocaleDateString()}`
+            : "N/A"}
+        </p>
+      </div>
+
+      <div className="legend">
+        <p>
+          <span className="dot period-start-dot" /> Period Start
+        </p>
+        <p>
+          <span className="dot next-period-dot" /> Next Period
+        </p>
+        <p>
+          <span className="dot fertile-window-dot" /> Fertile Window
+        </p>
       </div>
     </div>
   );
 }
 
 export default PeriodTracker;
-

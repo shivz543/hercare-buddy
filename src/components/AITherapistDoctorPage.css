@@ -1,0 +1,192 @@
+/* Make the page container full viewport with flex row */
+.page-container-horizontal {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  gap: 2rem;
+  padding: 2rem;
+  background: #fff1f2;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Each section takes equal width and full height */
+.page-container-horizontal .chatbot-section,
+.page-container-horizontal .doctor-support-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #ffe4e6;
+  border-radius: 1.5rem;
+  box-shadow: 0 6px 24px rgba(255, 107, 107, 0.15);
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+/* Headings */
+.page-container-horizontal h2 {
+  color: #cc2244;
+  font-weight: 700;
+  margin-bottom: 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.8rem;
+  user-select: none;
+}
+
+.page-container-horizontal .animated-emoji {
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1);}
+  50% { transform: scale(1.2);}
+}
+
+/* Chat window grows to fill space and scrolls */
+.page-container-horizontal .chat-window {
+  flex-grow: 1;
+  overflow-y: auto;
+  background: #fffafc;
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: inset 0 0 12px #ff6b6b33;
+}
+
+/* Messages styles */
+.page-container-horizontal .chat-message {
+  padding: 0.9rem 1.4rem;
+  border-radius: 18px;
+  max-width: 75%;
+  animation: fadeInUp 0.3s ease forwards;
+  word-break: break-word;
+}
+
+.page-container-horizontal .chat-message.bot {
+  background: #ffe4e6;
+  color: #cc2244;
+  align-self: flex-start;
+  border-radius: 18px 18px 18px 5px;
+}
+
+.page-container-horizontal .chat-message.user {
+  background: #fb7185;
+  color: white;
+  align-self: flex-end;
+  border-radius: 18px 18px 5px 18px;
+}
+
+/* Chat input row fixed at bottom of chatbot section */
+.page-container-horizontal .chat-input-area {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.page-container-horizontal .chat-input-area input {
+  flex-grow: 1;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  border: 1px solid #fbcfe8;
+  font-size: 1.1rem;
+  outline: none;
+}
+
+.page-container-horizontal .chat-input-area input:focus {
+  border-color: #ff6b6b;
+  box-shadow: 0 0 6px #fbcfe877;
+}
+
+.page-container-horizontal .chat-input-area button {
+  background: #ff6b6b;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: background 0.3s ease;
+}
+
+.page-container-horizontal .chat-input-area button:hover {
+  background: #e11d48;
+}
+
+/* Doctor Support Styles */
+.page-container-horizontal .doctor-search-input {
+  width: 100%;
+  padding: 1rem 1.4rem;
+  border-radius: 12px;
+  border: 1px solid #fbcfe8;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  outline: none;
+}
+
+.page-container-horizontal .doctor-search-input:focus {
+  border-color: #ff6b6b;
+  box-shadow: 0 0 6px #fbcfe877;
+}
+
+.page-container-horizontal .doctor-list {
+  overflow-y: auto;
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.3rem;
+  padding-right: 4px; /* for scrollbar room */
+}
+
+.page-container-horizontal .doctor-card {
+  background: #fff1f2;
+  padding: 1.2rem 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px #ff9ba0aa;
+  transition: box-shadow 0.3s ease;
+  word-break: break-word;
+}
+
+.page-container-horizontal .doctor-card h3 {
+  margin-top: 0;
+  color: #cc2244;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.page-container-horizontal .doctor-card p {
+  margin: 4px 0;
+  font-weight: 500;
+}
+
+.page-container-horizontal .doctor-card a {
+  color: #b91c1c;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.page-container-horizontal .doctor-card a:hover {
+  text-decoration: underline;
+}
+
+/* Scrollbar styling (optional) */
+.page-container-horizontal .chat-window::-webkit-scrollbar,
+.page-container-horizontal .doctor-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.page-container-horizontal .chat-window::-webkit-scrollbar-thumb,
+.page-container-horizontal .doctor-list::-webkit-scrollbar-thumb {
+  background: #ff6b6baa;
+  border-radius: 4px;
+}
+
+/* Fade animation */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: none; }
+}
